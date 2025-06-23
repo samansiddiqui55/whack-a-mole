@@ -57,18 +57,46 @@ function plant(){
     plantt.appendChild(pplant);
 }
 
+// function selectTile(){
+//     if(gameover){
+//         return; 
+//     }
+//     if(this == curmole){
+//          score = score+10; 
+//          document.getElementById("score").innerHTML = score;
+//     }
+//      else if(this == plantt){
+//         document.getElementById("score").innerHTML = "GAMEOVER:" +score;
+//         gameover = true;
+//    }
+
+
+// }
+
 function selectTile(){
-    if(gameover){
-        return; 
+    if (gameover) return;
+
+    const scoreEl = document.getElementById("score");
+
+    if (this === curmole) {
+        // Hit a mole
+        score += 10;
+        scoreEl.innerHTML = score;
+        // ← tell the arcade wrapper
+        window.parent.postMessage(
+          { type: "moleHit", score },
+          "*"
+        );
     }
-    if(this == curmole){
-         score = score+10; 
-         document.getElementById("score").innerHTML = score;
-    }
-     else if(this == plantt){
-        document.getElementById("score").innerHTML = "GAMEOVER:" +score;
+    else if (this === plantt) {
+        // Hit a plant → game over
         gameover = true;
-   }
-
-
+        scoreEl.innerHTML = "GAMEOVER:" + score;
+        // ← tell the arcade wrapper
+        window.parent.postMessage(
+          { type: "plantHit", score },
+          "*"
+        );
+    }
 }
+
